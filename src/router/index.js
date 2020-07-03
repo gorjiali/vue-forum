@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HelloWorld from '../components/HelloWorld.vue'
+import HelloWorld from '@/components/HelloWorld.vue';
+import ThreadShow from '@/components/ThreadShow.vue'
+
 
 Vue.use(VueRouter)
 
@@ -9,11 +11,18 @@ Vue.use(VueRouter)
     path: '/',
     name: 'Home',
     component: HelloWorld
+  },
+  {
+    path: '/thread/:id',
+    name: 'ThreadShow',
+    component: ThreadShow,
+    props: true
   }
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode: 'history'
 })
 
 export default router
