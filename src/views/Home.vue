@@ -7,7 +7,7 @@
 
 <script>
 import sourceData from "@/data";
-import ThreadList from './ThreadList'
+import ThreadList from "@/components/ThreadList";
 
 export default {
   data() {
@@ -18,7 +18,7 @@ export default {
     };
   },
 
-  components: {ThreadList}
+  components: { ThreadList }
 };
 </script>
 

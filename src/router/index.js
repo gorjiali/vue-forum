@@ -1,28 +1,27 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import HelloWorld from '@/components/HelloWorld.vue';
-import ThreadShow from '@/components/ThreadShow.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Home from '@/views/Home.vue';
+import ThreadShow from '@/views/ThreadShow.vue';
 
+Vue.use(VueRouter);
 
-Vue.use(VueRouter)
-
-  const routes = [
+const routes = [
   {
     path: '/',
     name: 'Home',
-    component: HelloWorld
+    component: Home,
   },
   {
     path: '/thread/:id',
     name: 'ThreadShow',
     component: ThreadShow,
-    props: true
-  }
-]
+    props: true,
+  },
+];
 
 const router = new VueRouter({
   routes,
-  mode: 'history'
-})
+  mode: 'history',
+});
 
-export default router
+export default router;
