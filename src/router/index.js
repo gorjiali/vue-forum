@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import ThreadShow from '@/views/ThreadShow.vue';
+import NotFound from '@/views/NotFound.vue';
 
 Vue.use(VueRouter);
 
@@ -17,6 +18,11 @@ const routes = [
     component: ThreadShow,
     props: true,
   },
+  {
+    path: '*',
+    name: 'NotFound',
+    component: NotFound
+  }
 ];
 
 const router = new VueRouter({
