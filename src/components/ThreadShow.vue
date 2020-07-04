@@ -25,24 +25,24 @@
 </template>
 
 <script>
-import sourceData from '@/data';
+import sourceData from "@/data";
 
 export default {
-    props: {
-        id: {
-            required: true,
-            type: String
-        }
-    },
-
-    data() {
-        return {
-            thread: sourceData.threads[this.id],
-            posts: sourceData.posts,
-            users: sourceData.users,
-        }
+  props: {
+    id: {
+      required: true,
+      type: String
     }
-}
+  },
+
+  data() {
+    return {
+      thread: sourceData.threads[this.id],
+      posts: sourceData.posts,
+      users: sourceData.users
+    };
+  }
+};
 </script>
 
 <style>
