@@ -4,20 +4,14 @@
 
     <PostList :posts="posts" />
 
-    <form @submit.prevent="addPost">
-      <div class="form-group">
-        <textarea v-model="newPostText" cols="30" rows="10" class="form-input"></textarea>
-      </div>
-      <div class="form-actions">
-        <button class="btn-blue">Submit post</button>
-      </div>
-    </form>
+    <PostEditor :threadId="id" @save="addPost" />
   </div>
 </template>
 
 <script>
 import sourceData from "@/data";
 import PostList from "@/components/PostList";
+import PostEditor from "@/components/PostEditor";
 
 export default {
   props: {
@@ -29,13 +23,13 @@ export default {
 
   data() {
     return {
-      thread: sourceData.threads[this.id],
-      newPostText: ""
+      thread: sourceData.threads[this.id]
     };
   },
 
   components: {
-    PostList
+    PostList,
+    PostEditor
   },
 
   computed: {
@@ -48,22 +42,13 @@ export default {
   },
 
   methods: {
-    addPost() {
-      const postId = `newPost ${Math.random()}`;
-      const post = {
-        text: this.newPostText,
-        publishedAt: Math.floor(Date.now()) / 1000,
-        userId: "ALXhxjwgY9PinwNGHpfai6OWyDu2",
-        threadId: this.id,
-        ".key": postId
-      };
+    addPost({ post }) {
+      const postId = post[".key"];
 
       // this.$set(obj, propertyName, value)
       this.$set(this.thread.posts, postId, postId);
       this.$set(sourceData.posts, postId, post);
       this.$set(sourceData.users[post.userId].posts, postId, postId);
-
-      this.newPostText = "";
     }
   }
 };
