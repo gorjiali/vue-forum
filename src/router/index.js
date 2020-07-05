@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import ThreadShow from '@/views/ThreadShow.vue';
+import ForumShow from '@/views/ForumShow.vue';
 import NotFound from '@/views/NotFound.vue';
 
 Vue.use(VueRouter);
@@ -13,6 +14,12 @@ const routes = [
     component: Home,
   },
   {
+    path: '/forum/:id',
+    name: 'ForumShow',
+    component: ForumShow,
+    props: true,
+  },
+  {
     path: '/thread/:id',
     name: 'ThreadShow',
     component: ThreadShow,
@@ -21,8 +28,8 @@ const routes = [
   {
     path: '*',
     name: 'NotFound',
-    component: NotFound
-  }
+    component: NotFound,
+  },
 ];
 
 const router = new VueRouter({
