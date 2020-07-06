@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import ThreadShow from '@/views/ThreadShow.vue';
 import ForumShow from '@/views/ForumShow.vue';
+import CategoryShow from '@/views/CategoryShow.vue';
 import NotFound from '@/views/NotFound.vue';
 
 Vue.use(VueRouter);
@@ -12,6 +13,12 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/category/:id',
+    name: 'CategoryShow',
+    component: CategoryShow,
+    props: true,
   },
   {
     path: '/forum/:id',

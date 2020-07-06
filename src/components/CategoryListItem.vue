@@ -1,7 +1,7 @@
 <template>
   <div class="forum-list">
     <h2 class="list-title">
-      <a href="#">{{ category.name }}</a>
+      <router-link :to="{name: 'CategoryShow', params: {id: category['.key']}}">{{ category.name }}</router-link>
     </h2>
     <ForumListItem v-for="forum in forums" :key="forum['.key']" :forum="forum" />
   </div>
