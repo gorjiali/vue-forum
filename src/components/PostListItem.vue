@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import sourceData from "@/data";
+ 
 
 export default {
   props: {
@@ -33,11 +33,11 @@ export default {
 
   computed: {
     user() {
-      return sourceData.users[this.post.userId];
+      return   this.$store.state.users[this.post.userId];
     },
 
     userPostsCount() {
-      return Object.values(sourceData.users[this.post.userId].posts).length;
+      return Object.values(  this.$store.state.users[this.post.userId].posts).length;
     }
   }
 };
