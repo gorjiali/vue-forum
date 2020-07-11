@@ -26,16 +26,14 @@ export default {
 
   methods: {
     save() {
-      const postId = `newPost ${Math.random()}`;
       const post = {
         text: this.text,
         publishedAt: Math.floor(Date.now()) / 1000,
         userId: "ALXhxjwgY9PinwNGHpfai6OWyDu2",
-        threadId: this.threadId,
-        ".key": postId
+        threadId: this.threadId
       };
 
-      this.$emit("save", { post });
+      this.$store.dispatch("addPost", post);
 
       this.text = "";
     }
