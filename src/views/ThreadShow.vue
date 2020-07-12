@@ -2,30 +2,25 @@
   <div class="col-large push-top">
     <h1>{{ thread.title }}</h1>
 
-    <div class="post-list">
-      <div v-for="postId in thread.posts" class="post">
-        <div class="user-info">
-          <a href="#" class="user-name">{{ users[posts[postId].userId].name }}</a>
+    <p>
+      By
+      <a href="#" class="link-unstyled">Robin</a>,
+      <AppDate :timestamp="thread.publishedAt" />.
+      <span
+        style="float:right; margin-top: 2px;"
+        class="hide-mobile text-faded text-small"
+      >3 replies by 3 contributors</span>
+    </p>
 
-          <a href="#">
-            <img class="avatar-large" :src="users[posts[postId].userId].avatar" alt />
-          </a>
+    <PostList :posts="posts" />
 
-          <p class="desktop-only text-small">107 posts</p>
-        </div>
-
-        <div class="post-content">
-          <div>{{ posts[postId].text }}</div>
-        </div>
-
-        <div class="post-date text-faded">{{ posts[postId].publishedAt }}</div>
-      </div>
-    </div>
+    <PostEditor :threadId="id" />
   </div>
 </template>
 
 <script>
-import sourceData from "@/data";
+import PostList from "@/components/PostList";
+import PostEditor from "@/components/PostEditor";
 
 export default {
   props: {
@@ -35,12 +30,22 @@ export default {
     }
   },
 
-  data() {
-    return {
-      thread: sourceData.threads[this.id],
-      posts: sourceData.posts,
-      users: sourceData.users
-    };
+  components: {
+    PostList,
+    PostEditor
+  },
+
+  computed: {
+    thread() {
+      return this.$store.state.threads[this.id];
+    },
+
+    posts() {
+      const postIds = Object.values(this.thread.posts);
+      return Object.values(this.$store.state.posts).filter(post =>
+        postIds.includes(post[".key"])
+      );
+    }
   }
 };
 </script>
