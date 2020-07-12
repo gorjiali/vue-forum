@@ -1,0 +1,85 @@
+<template>
+  <div class="flex-grid">
+    <div class="col-3 push-top">
+      <div class="profile-card">
+        <p class="text-center">
+          <img :src="user.avatar" alt class="avatar-xlarge" />
+        </p>
+
+        <h1 class="title">{{ user.username }}</h1>
+
+        <p class="text-lead">{{ user.name}}</p>
+
+        <p class="text-justify">{{ user.bio ? user.bio : 'No bio specified.'}}</p>
+
+        <span class="online">{{ user.username }} is online</span>
+
+        <div class="stats">
+          <span>{{ userPostsCount }} {{ userPostsCount === 1 ? 'Post' : 'Posts' }}</span>
+          <span>{{ userThreadsCount }} {{ userThreadsCount === 1 ? 'Thread' : 'Threads' }}</span>
+        </div>
+
+        <hr />
+
+        <p class="text-large text-center">
+          <i class="fa fa-globe"></i>
+          <a href="#">{{ user.website ? user.website : '' }}</a>
+        </p>
+      </div>
+
+      <p class="text-xsmall text-faded text-center">Member since june 2003, last visited 4 hours ago</p>
+
+      <div class="text-center">
+        <hr />
+        <a href="edit-profile.html" class="btn-green btn-small">Edit Profile</a>
+      </div>
+    </div>
+
+    <div class="col-7 push-top">
+      <div class="profile-header">
+        <span class="text-lead">{{ user.username }}'s recent activity</span>
+        <a href="#">See only started threads?</a>
+      </div>
+
+      <hr />
+      <PostList :posts="posts" />
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+import PostList from "@/components/PostList";
+
+export default {
+  components: {
+    PostList
+  },
+
+  computed: {
+    ...mapGetters({
+      user: "authUser"
+    }),
+
+    posts() {
+      if (this.user.posts) {
+        return Object.values(this.$store.state.posts).filter(
+          post => post.userId === this.user[".key"]
+        );
+      }
+      return [];
+    },
+
+    userPostsCount() {
+      return this.user.posts ? Object.values(this.user.posts).length : 0;
+    },
+
+    userThreadsCount() {
+      return this.user.threads ? Object.values(this.user.threads).length : 0;
+    }
+  }
+};
+</script>
+
+<style>
+</style>
