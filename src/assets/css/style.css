@@ -738,10 +738,11 @@ span.online {
 }
 
 span.online::before {
-    font-family: FontAwesome;
-    content: "\f2be";
+    font-family: "Font Awesome 5 Free";
+    content: "\f2bd";
     font-size: 14px;
     margin-right: 5px;
+    font-weight: 900;
 }
 
 .header {
