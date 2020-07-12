@@ -9,7 +9,7 @@
 
 <script>
 import ForumListItem from "./ForumListItem";
-import sourceData from "@/data";
+ 
 
 export default {
   props: {
@@ -25,7 +25,7 @@ export default {
 
   computed: {
     forums() {
-      return Object.values(sourceData.forums).filter(
+      return Object.values(  this.$store.state.forums).filter(
         forum => forum.categoryId === this.category[".key"]
       );
     }

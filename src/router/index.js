@@ -5,6 +5,7 @@ import ThreadShow from '@/views/ThreadShow.vue';
 import ForumShow from '@/views/ForumShow.vue';
 import CategoryShow from '@/views/CategoryShow.vue';
 import NotFound from '@/views/NotFound.vue';
+import Profile from '@/views/Profile.vue';
 
 Vue.use(VueRouter);
 
@@ -13,6 +14,18 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/me',
+    name: 'Profile',
+    component: Profile,
+    props: true,
+  },
+  {
+    path: '/me/edit',
+    name: 'ProfileEdit',
+    component: Profile,
+    props: { edit: true },
   },
   {
     path: '/category/:id',
