@@ -25,9 +25,17 @@ export default new Vuex.Store({
       context.commit('appendPostToThread', { post, postId });
       context.commit('appendPostToUser', { post, postId });
     },
+
+    updateUser(context, user) {
+      context.commit('setUser', { user, userId: user['.key'] });
+    },
   },
 
   mutations: {
+    setUser(state, { user, userId }) {
+      Vue.set(state.users, userId, user);
+    },
+
     setPost(state, { post, postId }) {
       Vue.set(state.posts, postId, post);
     },
