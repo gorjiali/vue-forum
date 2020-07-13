@@ -29,16 +29,20 @@ export default new Vuex.Store({
     },
 
     addThread(context, { title, text, forumId }) {
-      const threadId = `newThread ${Math.random()}`;
-      const userId = context.state.authId;
-      const publishedAt = Math.floor(Date.now()) / 1000;
-      let thread = { title, text, forumId, '.key': threadId, userId, publishedAt };
+      return new Promise((resolve, reject) => {
+        const threadId = `newThread ${Math.random()}`;
+        const userId = context.state.authId;
+        const publishedAt = Math.floor(Date.now()) / 1000;
+        let thread = { title, text, forumId, '.key': threadId, userId, publishedAt };
 
-      context.commit('setThread', { thread, threadId });
+        context.commit('setThread', { thread, threadId });
 
-      context.dispatch('addPost', { text, threadId });
-      context.commit('appendThreadToForum', { forumId, threadId });
-      context.commit('appendThreadToUser', { userId, threadId });
+        context.dispatch('addPost', { text, threadId });
+        context.commit('appendThreadToForum', { forumId, threadId });
+        context.commit('appendThreadToUser', { userId, threadId });
+
+        resolve(context.state.threads[threadId]);
+      });
     },
 
     updateUser(context, user) {

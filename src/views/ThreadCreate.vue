@@ -50,11 +50,18 @@ export default {
   methods: {
     save() {
       const { title, text } = this;
-      this.$store.dispatch("addThread", {
-        title,
-        text,
-        forumId: this.forum[".key"]
-      });
+      this.$store
+        .dispatch("addThread", {
+          title,
+          text,
+          forumId: this.forum[".key"]
+        })
+        .then(thread =>
+          this.$router.push({
+            name: "ThreadShow",
+            params: { id: thread[".key"] }
+          })
+        );
     }
   }
 };
