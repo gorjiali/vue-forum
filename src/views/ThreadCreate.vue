@@ -24,7 +24,7 @@
       </div>
 
       <div class="btn-group">
-        <button class="btn btn-ghost">Cancel</button>
+        <button @click.prevent="cancel" class="btn btn-ghost">Cancel</button>
         <button class="btn btn-blue" type="submit" name="Publish">Publish</button>
       </div>
     </form>
@@ -51,17 +51,20 @@ export default {
     save() {
       const { title, text } = this;
       this.$store
-        .dispatch("addThread", {
-          title,
-          text,
-          forumId: this.forum[".key"]
-        })
+        .dispatch("addThread", { title, text, forumId: this.forum[".key"] })
         .then(thread =>
           this.$router.push({
             name: "ThreadShow",
             params: { id: thread[".key"] }
           })
         );
+    },
+
+    cancel() {
+      this.$router.push({
+        name: "ForumShow",
+        params: { id: this.forum[".key"] }
+      });
     }
   }
 };
