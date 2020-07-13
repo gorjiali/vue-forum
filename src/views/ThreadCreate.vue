@@ -2,7 +2,7 @@
   <div class="col-full push-top">
     <h1>
       Create new thread in
-      <i>{{forum.title}}</i>
+      <i>{{forum.name}}</i>
     </h1>
 
     <form @submit.prevent="save">
@@ -33,6 +33,13 @@
 
 <script>
 export default {
+  props: {
+    forum: {
+      type: Object,
+      required: true
+    }
+  },
+
   data() {
     return {
       title: "",
@@ -42,7 +49,12 @@ export default {
 
   methods: {
     save() {
-      // dispatch to vuex action
+      const { title, text } = this;
+      this.$store.dispatch("addThread", {
+        title,
+        text,
+        forumId: this.forum[".key"]
+      });
     }
   }
 };
