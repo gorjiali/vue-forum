@@ -29,6 +29,16 @@ export default new Vuex.Store({
       return Promise.resolve(postId);
     },
 
+    updatePost(context, { text, postId }) {
+      return new Promise((resolve, reject) => {
+        let post = context.state.posts[postId];
+
+        context.commit('setPost', { post: { ...post, text }, postId });
+
+        resolve({ ...post, text });
+      });
+    },
+
     addThread(context, { title, text, forumId }) {
       return new Promise((resolve, reject) => {
         const threadId = `newThread ${Math.random()}`;
