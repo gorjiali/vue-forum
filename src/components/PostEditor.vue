@@ -12,14 +12,25 @@
 
 <script>
 export default {
-  props: {
+  props: { 
     threadId: {
       required: false,
       type: String
     },
 
     post: {
-      type: Object
+      type: Object,
+      validator: value => { //EDU custom prop validator
+        if (!value.text)
+          return console.error(
+            'The post prop object must include a "text" attribute.'
+          );
+        if (!value[".key"])
+          return console.error(
+            'The post prop object must include a ".key" attribute.'
+          );
+        return true; //
+      }
     }
   },
 
@@ -65,7 +76,7 @@ export default {
     },
 
     cancel() {
-      this.$emit('cancel')
+      this.$emit("cancel");
     }
   }
 };
