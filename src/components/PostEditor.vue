@@ -1,39 +1,82 @@
 <template>
   <form @submit.prevent="save">
     <div class="form-group">
-      <textarea v-model="text" cols="30" rows="10" class="form-input"></textarea>
+      <textarea v-model="text" cols="130" rows="10" class="form-input"></textarea>
     </div>
     <div class="form-actions">
-      <button class="btn-blue">Submit post</button>
+      <button @click.prevent="cancel" class="btn btn-ghost">Cancel</button>
+      <button class="btn-blue">{{ isUpdate ? 'Update' : 'Submit post' }}</button>
     </div>
   </form>
 </template>
 
 <script>
 export default {
-  props: {
+  props: { 
     threadId: {
-      required: true,
+      required: false,
       type: String
+    },
+
+    post: {
+      type: Object,
+      validator: value => { //EDU custom prop validator
+        if (!value.text)
+          return console.error(
+            'The post prop object must include a "text" attribute.'
+          );
+        if (!value[".key"])
+          return console.error(
+            'The post prop object must include a ".key" attribute.'
+          );
+        return true; //
+      }
     }
   },
 
   data() {
     return {
-      text: ""
+      text: this.post ? this.post.text : ""
     };
+  },
+
+  computed: {
+    isUpdate() {
+      return this.post ? true : false;
+    }
   },
 
   methods: {
     save() {
+      this.persist().then(post => {
+        this.$emit("save");
+      });
+    },
+
+    persist() {
+      return this.isUpdate ? this.update() : this.create();
+    },
+
+    create() {
       const post = {
         text: this.text,
         threadId: this.threadId
       };
-
-      this.$store.dispatch("addPost", post);
-
       this.text = "";
+      return this.$store.dispatch("addPost", post);
+    },
+
+    update() {
+      const post = {
+        text: this.text,
+        postId: this.post[".key"]
+      };
+      return this.$store.dispatch("updatePost", post);
+      this.text = "";
+    },
+
+    cancel() {
+      this.$emit("cancel");
     }
   }
 };
