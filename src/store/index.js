@@ -26,6 +26,8 @@ export default new Vuex.Store({
     userPostsCount: (state) => (id) => countObjectProperties(state.users[id].posts), //EDU getters with higher order functions
 
     userThreadsCount: (state) => (id) => countObjectProperties(state.users[id].threads),
+
+    threadRepliesCount: (state) => (id) => countObjectProperties(state.threads[id].posts) - 1,
   },
 
   actions: {

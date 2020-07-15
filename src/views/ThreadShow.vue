@@ -16,7 +16,7 @@
       <span
         style="float:right; margin-top: 2px;"
         class="hide-mobile text-faded text-small"
-      >3 replies by 3 contributors</span>
+      >{{ repliesCount }} replies by {{countributorsCount}} contributors</span>
     </p>
 
     <PostList :posts="posts" />
@@ -45,6 +45,21 @@ export default {
   computed: {
     thread() {
       return this.$store.state.threads[this.id];
+    },
+
+    repliesCount() {
+      return this.$store.getters.threadRepliesCount(this.id);
+    },
+
+    countributorsCount() {
+      const userIds = Object.keys(this.thread.posts)
+        .filter(postId => postId !== this.thread.firstPostId)
+        .map(id => this.$store.state.posts[id])
+        .map(post => post.userId);
+
+      //EDU remove duplicate array members
+      // return userIds.filter((item, index) => userIds.indexOf(item) === index).length;
+      return [...new Set(userIds)].length;
     },
 
     posts() {
