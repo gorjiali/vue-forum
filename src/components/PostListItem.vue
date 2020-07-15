@@ -8,6 +8,7 @@
       </a>
 
       <p class="desktop-only text-small">{{ userPostsCount }} posts</p>
+      <p class="desktop-only text-small">{{ userThreadsCount }} threads</p>
     </div>
 
     <div class="post-content">
@@ -36,7 +37,6 @@
 </template>
 
 <script>
-import { countObjectProperties } from "@/utils";
 import PostEditor from "./PostEditor";
 
 export default {
@@ -63,9 +63,11 @@ export default {
     },
 
     userPostsCount() {
-      return countObjectProperties(
-        this.$store.state.users[this.post.userId].posts
-      );
+      return this.$store.getters.userPostsCount(this.post.userId);
+    },
+
+    userThreadsCount() {
+      return this.$store.getters.userThreadsCount(this.post.userId);
     }
   }
 };
