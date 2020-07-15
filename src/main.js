@@ -10,6 +10,18 @@ import '@fortawesome/fontawesome-free/js/all.js';
 // Global base components
 Vue.component('AppDate', AppDate);
 
+// Initial Firebase
+const firebaseConfig = {
+  apiKey: 'AIzaSyDHGmztwaGx5U811FGX7PFkbERXTct7pbI',
+  authDomain: 'vue-forum-14ffb.firebaseapp.com',
+  databaseURL: 'https://vue-forum-14ffb.firebaseio.com',
+  projectId: 'vue-forum-14ffb',
+  storageBucket: 'vue-forum-14ffb.appspot.com',
+  messagingSenderId: '46520651320',
+  appId: '1:46520651320:web:16d12cabd68de26ca7a0cd',
+  measurementId: 'G-XZHRZBGY22',
+};
+
 Vue.config.productionTip = false;
 
 new Vue({
