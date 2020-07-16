@@ -114,6 +114,17 @@ export default new Vuex.Store({
       });
     },
 
+    fetchItems({ dispatch }, { ids, resource }) {
+      return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
+    },
+
+    fetchPosts({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, resource: 'posts' })
+    },
+
+    fetchUsers({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, resource: 'users' })
+    },
     fetchThread({ dispatch }, { id }) {
       return dispatch('fetchItem', { id, resource: 'threads' })
     },
