@@ -103,70 +103,33 @@ export default new Vuex.Store({
       context.commit('setUser', { user, userId: user['.key'] });
     },
 
-    fetchThread({ commit, state }, { id }) {
+    fetchItem({ commit, state }, { id, resource }) {
       return new Promise((resolve, reject) => {
-        database()
-          .ref('threads')
-          .child(id)
-          .once('value', (snapshot) => {
-            const thread = snapshot.val();
-            commit('setThread', {
-              threadId: snapshot.key,
-              thread: { ...thread, '.key': snapshot.key },
-            });
-            resolve(state.threads[id]);
+        database().ref(resource).child(id).once('value', (snapshot) => {
+          commit('setItem', {
+            id: snapshot.key, item: { ...snapshot.val(), '.key': snapshot.key }, resource
           });
+          resolve(state[resource][id]);
+        });
       });
     },
 
-    fetchUser({ commit, state }, { id }) {
-      return new Promise((resolve, reject) => {
-        database()
-          .ref('users')
-          .child(id)
-          .once('value', (snapshot) => {
-            const user = snapshot.val();
-            commit('setUser', {
-              userId: snapshot.key,
-              user: { ...user, '.key': snapshot.key },
-            });
-            resolve(state.users[id]);
-          });
-      });
+    fetchThread({ dispatch }, { id }) {
+      return dispatch('fetchItem', { id, resource: 'threads' })
     },
 
-    fetchPost({ commit, state }, { id }) {
-      return new Promise((resolve, reject) => {
-        database()
-          .ref('posts')
-          .child(id)
-          .once('value', (snapshot) => {
-            const post = snapshot.val();
-            commit('setPost', {
-              postId: snapshot.key,
-              post: { ...post, '.key': snapshot.key },
-            });
-            resolve(state.posts[id]);
-          });
-      });
+    fetchUser({ dispatch }, { id }) {
+      return dispatch('fetchItem', { id, resource: 'users' })
+    },
+
+    fetchPost({ dispatch }, { id }) {
+      return dispatch('fetchItem', { id, resource: 'posts' })
     },
   },
 
   mutations: {
-    setUser(state, { thread, threadId }) {
-      Vue.set(state.threads, threadId, thread);
-    },
-
-    setUser(state, { user, userId }) {
-      Vue.set(state.users, userId, user);
-    },
-
-    setPost(state, { post, postId }) {
-      Vue.set(state.posts, postId, post);
-    },
-
-    setThread(state, { thread, threadId }) {
-      Vue.set(state.threads, threadId, thread);
+    setItem(state, { resource, item, id }) {
+      Vue.set(state[resource], id, item)
     },
 
     appendThreadToUser: makeAppendParentToChildMutation({ parent: 'users', child: 'threads' }),
