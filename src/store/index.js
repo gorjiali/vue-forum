@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import sourceData from '@/data';
+import { database } from 'firebase';
 import { countObjectProperties } from '@/utils';
 
 Vue.use(Vuex);
@@ -14,13 +14,18 @@ const makeAppendParentToChildMutation = ({ child, parent }) => (state, { childId
 
 export default new Vuex.Store({
   state: {
-    ...sourceData,
+    categories: {},
+    forums: {},
+    users: {},
+    threads: {},
+    posts: {},
     authId: 'VXjpr2WHa8Ux4Bnggym8QFLdv5C3',
   },
 
   getters: {
     authUser(state) {
-      return state.users[state.authId];
+      // return state.users[state.authId];
+      return {};
     },
 
     userPostsCount: (state) => (id) => countObjectProperties(state.users[id].posts), //EDU getters with higher order functions
@@ -96,6 +101,54 @@ export default new Vuex.Store({
 
     updateUser(context, user) {
       context.commit('setUser', { user, userId: user['.key'] });
+    },
+
+    fetchThread({ commit, state }, { id }) {
+      return new Promise((resolve, reject) => {
+        database()
+          .ref('threads')
+          .child(id)
+          .once('value', (snapshot) => {
+            const thread = snapshot.val();
+            commit('setThread', {
+              threadId: snapshot.key,
+              thread: { ...thread, '.key': snapshot.key },
+            });
+            resolve(state.threads[id]);
+          });
+      });
+    },
+
+    fetchUser({ commit, state }, { id }) {
+      return new Promise((resolve, reject) => {
+        database()
+          .ref('users')
+          .child(id)
+          .once('value', (snapshot) => {
+            const user = snapshot.val();
+            commit('setUser', {
+              userId: snapshot.key,
+              user: { ...user, '.key': snapshot.key },
+            });
+            resolve(state.users[id]);
+          });
+      });
+    },
+
+    fetchPost({ commit, state }, { id }) {
+      return new Promise((resolve, reject) => {
+        database()
+          .ref('posts')
+          .child(id)
+          .once('value', (snapshot) => {
+            const post = snapshot.val();
+            commit('setPost', {
+              postId: snapshot.key,
+              post: { ...post, '.key': snapshot.key },
+            });
+            resolve(state.posts[id]);
+          });
+      });
     },
   },
 

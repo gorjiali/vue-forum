@@ -1,5 +1,5 @@
 <template>
-  <div class="col-large push-top">
+  <div v-if="thread && threadCreator" class="col-large push-top">
     <h1>
       {{ thread.title }}
       <router-link
@@ -28,6 +28,7 @@
 <script>
 import PostList from "@/components/PostList";
 import PostEditor from "@/components/PostEditor";
+import { countObjectProperties } from "@/utils";
 
 export default {
   props: {
@@ -56,14 +57,16 @@ export default {
     },
 
     countributorsCount() {
-      const userIds = Object.keys(this.thread.posts)
-        .filter(postId => postId !== this.thread.firstPostId)
-        .map(id => this.$store.state.posts[id])
-        .map(post => post.userId);
+      // const userIds = Object.keys(this.thread.posts)
+      //   .filter(postId => postId !== this.thread.firstPostId)
+      //   .map(id => this.$store.state.posts[id])
+      //   .map(post => post.userId);
 
-      //EDU remove duplicate array members
-      // return userIds.filter((item, index) => userIds.indexOf(item) === index).length;
-      return [...new Set(userIds)].length;
+      // //EDU remove duplicate array members
+      // // return userIds.filter((item, index) => userIds.indexOf(item) === index).length;
+      // return [...new Set(userIds)].length;
+
+      return countObjectProperties(this.thread.contributors);
     },
 
     posts() {
@@ -72,6 +75,22 @@ export default {
         postIds.includes(post[".key"])
       );
     }
+  },
+
+  created() {
+    // fetch thread
+    this.$store.dispatch("fetchThread", { id: this.id }).then(thread => {
+      // fetch user
+      this.$store.dispatch("fetchPost", { id: thread.userId });
+
+      // fetch posts of thread
+      Object.keys(thread.posts).forEach(postId => {
+        this.$store.dispatch("fetchPost", { id: postId }).then(post => {
+          // fetch user of post
+          this.$store.dispatch("fetchUser", { id: post.userId });
+        });
+      });
+    });
   }
 };
 </script>
