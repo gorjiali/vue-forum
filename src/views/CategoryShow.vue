@@ -1,5 +1,5 @@
 <template>
-  <div class="col-full">
+  <div v-if="category" class="col-full push-top">
     <h1>{{ category.name }}</h1>
     <CategoryListItem :category="category" />
   </div>
@@ -7,7 +7,7 @@
 
 <script>
 import CategoryListItem from "@/components/CategoryListItem";
- 
+
 
 export default {
   props: {
@@ -18,12 +18,16 @@ export default {
   },
   computed: {
     category() {
-      return   this.$store.state.categories[this.id];
+      return this.$store.state.categories[this.id];
     }
   },
 
   components: {
     CategoryListItem
+  },
+
+  created() {
+    this.$store.dispatch('fetchCategory', { id: this.id })
   }
 };
 </script>

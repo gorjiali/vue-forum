@@ -114,17 +114,49 @@ export default new Vuex.Store({
       });
     },
 
+    fetchAllCategories({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        database().ref('categories').once('value', (snapshot) => {
+          const allCategories = snapshot.val();
+          Object.keys(allCategories).forEach(categoryId => {
+            commit('setItem', {
+              id: categoryId, item: { ...allCategories[categoryId], '.key': categoryId }, resource: 'categories'
+            });
+          });
+          resolve(state.categories);
+        });
+      });
+    },
+
     fetchItems({ dispatch }, { ids, resource }) {
+      ids = Array.isArray(ids) ? ids : Object.keys(ids);
       return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
+    },
+
+    fetchForums({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, resource: 'forums' })
+    },
+
+    fetchThreads({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, resource: 'threads' })
+    },
+
+    fetchUsers({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, resource: 'users' })
     },
 
     fetchPosts({ dispatch }, { ids }) {
       return dispatch('fetchItems', { ids, resource: 'posts' })
     },
 
-    fetchUsers({ dispatch }, { ids }) {
-      return dispatch('fetchItems', { ids, resource: 'users' })
+    fetchCategory({ dispatch }, { id }) {
+      return dispatch('fetchItem', { id, resource: 'categories' })
     },
+
+    fetchForum({ dispatch }, { id }) {
+      return dispatch('fetchItem', { id, resource: 'forums' })
+    },
+
     fetchThread({ dispatch }, { id }) {
       return dispatch('fetchItem', { id, resource: 'threads' })
     },
