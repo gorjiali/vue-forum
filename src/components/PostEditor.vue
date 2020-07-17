@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   props: { 
     threadId: {
@@ -47,6 +48,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['addPost', 'updatePost']),
+
     save() {
       this.persist().then(post => {
         this.$emit("save");
@@ -63,7 +66,7 @@ export default {
         threadId: this.threadId
       };
       this.text = "";
-      return this.$store.dispatch("addPost", post);
+      return this.addPost(post);
     },
 
     update() {
@@ -71,7 +74,7 @@ export default {
         text: this.text,
         postId: this.post[".key"]
       };
-      return this.$store.dispatch("updatePost", post);
+      return this.updatePost(post);
       this.text = "";
     },
 

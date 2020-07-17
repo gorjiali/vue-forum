@@ -7,7 +7,7 @@
 
 <script>
 import CategoryListItem from "@/components/CategoryListItem";
-
+import { mapActions } from 'vuex';
 
 export default {
   props: {
@@ -26,8 +26,12 @@ export default {
     CategoryListItem
   },
 
+  methods: {
+    ...mapActions(['fetchCategory'])
+  },
+
   created() {
-    this.$store.dispatch('fetchCategory', { id: this.id })
+    this.fetchCategory({ id: this.id });
   }
 };
 </script>

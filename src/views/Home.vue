@@ -7,6 +7,7 @@
 
 <script>
 import CategoryList from "@/components/CategoryList";
+import { mapActions } from 'vuex';
 
 export default {
   computed: {
@@ -17,17 +18,21 @@ export default {
 
   components: { CategoryList },
 
+  methods: {
+    ...mapActions(['fetchAllCategories', 'fetchForums'])
+  },
+
   //EDU: lifecycle hook, beforeCreate: in beforeCreated we can't access or update data
-  beforeCreate() {
-    this.$store.dispatch('fetchAllCategories').then(categories => {
+  beforeCreated() { },
+
+  //EDU: lifecycle hook, create: triggers before rendering template in DOM, so it is a great time to fire an AJAX call
+  created() {
+    this.fetchAllCategories().then(categories => {
       Object.values(categories).forEach(category =>
-        this.$store.dispatch('fetchForums', { ids: category.forums })
+        this.fetchForums({ ids: category.forums })
       )
     })
   },
-
-  //EDU: lifecycle hook, create: triggers before rendering template in DOM, so it is a great time to fire an AJAX call
-  created() { },
 
   //EDU: lifecycle hook, beforeMount
   beforeMount() { },

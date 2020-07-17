@@ -9,6 +9,7 @@
 
 <script>
 import ForumListItem from "./ForumListItem";
+import { mapActions } from 'vuex';
 
 
 export default {
@@ -31,8 +32,12 @@ export default {
     }
   },
 
+  methods: {
+    ...mapActions(['fetchForums'])
+  },
+
   created() {
-    this.$store.dispatch('fetchForums', { ids: this.category.forums })
+    this.fetchForums({ ids: this.category.forums })
   }
 };
 </script>

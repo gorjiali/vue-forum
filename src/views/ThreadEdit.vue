@@ -8,6 +8,7 @@
 
 <script>
 import ThreadEditor from "@/components/ThreadEditor";
+import { mapActions } from 'vuex';
 
 export default {
   props: {
@@ -33,15 +34,11 @@ export default {
   },
 
   methods: {
+    ...mapActions(['updateThread']),
+
     save({ title, text }) {
-      this.$store
-        .dispatch("updateThread", { title, text, threadId: this.id })
-        .then(thread =>
-          this.$router.push({
-            name: "ThreadShow",
-            params: { id: thread[".key"] }
-          })
-        );
+      this.updateThread({ title, text, threadId: this.id })
+        .then(thread => this.$router.push({ name: "ThreadShow", params: { id: thread[".key"] } }));
     },
 
     cancel() {
