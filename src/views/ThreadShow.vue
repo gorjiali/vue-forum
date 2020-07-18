@@ -79,13 +79,15 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchThread', 'fetchPost', 'fetchPosts', 'fetchUsers'])
+    ...mapActions(['fetchThread', 'fetchUser', 'fetchPost', 'fetchPosts', 'fetchUsers'])
   },
 
   created() {
     this.fetchThread({ id: this.id }).then(thread => {
-      this.fetchPost({ id: thread.userId });
-      this.fetchPosts({ ids: Object.keys(thread.posts) }).then(posts => this.fetchUsers({ ids: posts.map(post => post.userId) }))
+      this.fetchUser({ id: thread.userId });
+      this.fetchPosts({ ids: Object.keys(thread.posts) }).then(
+        posts => this.fetchUsers({ ids: posts.map(post => post.userId) })
+      )
     });
   }
 };

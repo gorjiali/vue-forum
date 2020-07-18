@@ -9,6 +9,7 @@ const makeAppendParentToChildMutation = ({ child, parent }) => (state, { childId
 
 export default {
     setItem(state, { resource, item, id }) {
+        item['.key'] = id
         Vue.set(state[resource], id, item)
     },
 

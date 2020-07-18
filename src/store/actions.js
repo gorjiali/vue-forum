@@ -2,15 +2,20 @@ import { database } from 'firebase';
 
 export default {
     addPost({ commit, state }, post) {
-        const postId = `newPost ${Math.random()}`;
-        post['.key'] = postId;
+        const postId = database().ref('posts').push().key;
         post.userId = state.authId;
         post.publishedAt = Math.floor(Date.now()) / 1000;
+        let updates = {};
+        updates[`posts/${postId}`] = post;
+        updates[`threads/${post.threadId}/posts/${postId}`] = postId;
+        updates[`users/${post.userId}/posts/${postId}`] = postId;
 
-        commit('setPost', { post, postId });
-        commit('appendPostToThread', { parentId: post.threadId, childId: postId });
-        commit('appendPostToUser', { parentId: post.userId, childId: postId });
-        return Promise.resolve(postId);
+        database().ref().update(updates).then(() => {
+            commit('setItem', { resource: 'posts', item: post, id: postId });
+            commit('appendPostToThread', { parentId: post.threadId, childId: postId });
+            commit('appendPostToUser', { parentId: post.userId, childId: postId });
+            return Promise.resolve(postId);
+        })
     },
 
     updatePost({ commit, state }, { text, postId }) {
@@ -71,9 +76,7 @@ export default {
     fetchItem({ commit, state }, { id, resource }) {
         return new Promise((resolve, reject) => {
             database().ref(resource).child(id).once('value', (snapshot) => {
-                commit('setItem', {
-                    id: snapshot.key, item: { ...snapshot.val(), '.key': snapshot.key }, resource
-                });
+                commit('setItem', { id: snapshot.key, item: snapshot.val(), resource });
                 resolve(state[resource][id]);
             });
         });
@@ -85,7 +88,7 @@ export default {
                 const allCategories = snapshot.val();
                 Object.keys(allCategories).forEach(categoryId => {
                     commit('setItem', {
-                        id: categoryId, item: { ...allCategories[categoryId], '.key': categoryId }, resource: 'categories'
+                        id: categoryId, item: allCategories[categoryId], resource: 'categories'
                     });
                 });
                 resolve(state.categories);
