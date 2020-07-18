@@ -9,7 +9,7 @@ export default {
         updates[`posts/${postId}`] = post;
         updates[`threads/${post.threadId}/posts/${postId}`] = postId;
         updates[`users/${post.userId}/posts/${postId}`] = postId;
-        
+
         database().ref().update(updates).then(() => {
             commit('setItem', { resource: 'posts', item: post, id: postId });
             commit('appendPostToThread', { parentId: post.threadId, childId: postId });
@@ -22,20 +22,13 @@ export default {
     updatePost({ commit, state }, { text, postId }) {
         return new Promise((resolve, reject) => {
             let post = state.posts[postId];
-
-            commit('setPost', {
-                post: {
-                    ...post,
-                    edited: {
-                        at: Math.floor(Date.now()) / 1000,
-                        by: state.authUser,
-                    },
-                    text,
-                },
-                postId,
-            });
-
-            resolve({ ...post, text });
+            const edited = { at: Math.floor(Date.now()) / 1000, by: state.authId };
+            const updates = { text, edited };
+            
+            database().ref('posts').child(postId).update(updates).then(() => {
+                commit('setItem', { resource: 'posts', item: { ...post, edited, text }, id: postId });
+                resolve(state.posts[postId]);
+            })
         });
     },
 
