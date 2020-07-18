@@ -24,7 +24,7 @@ export default {
             let post = state.posts[postId];
             const edited = { at: Math.floor(Date.now()) / 1000, by: state.authId };
             const updates = { text, edited };
-            
+
             database().ref('posts').child(postId).update(updates).then(() => {
                 commit('setItem', { resource: 'posts', item: { ...post, edited, text }, id: postId });
                 resolve(state.posts[postId]);
@@ -63,15 +63,22 @@ export default {
         });
     },
 
-    updateThread({ state, commit, dispatch }, { title, text, threadId }) {
+    updateThread({ state, commit }, { title, text, threadId }) {
         return new Promise((resolve, reject) => {
             let thread = state.threads[threadId];
+            let post = state.posts[thread.firstPostId];
+            const edited = { at: Math.floor(Date.now()) / 1000, by: state.authId };
 
-            commit('setThread', { thread: { ...thread, title }, threadId });
+            let updates = {}
+            updates[`posts/${thread.firstPostId}/text`] = text;
+            updates[`posts/${thread.firstPostId}/edited`] = edited;
+            updates[`threads/${threadId}/title`] = title;
 
-            dispatch('updatePost', { text, postId: thread.firstPostId }).then(() => {
-                resolve({ ...thread, title });
-            });
+            database().ref().update(updates).then(() => {
+                commit('setItem', { resource: 'threads', item: { ...thread, title }, id: threadId });
+                commit('setItem', { resource: 'posts', item: { ...post, text }, id: thread.firstPostId });
+                resolve(state.threads[threadId]);
+            })
         });
     },
 
