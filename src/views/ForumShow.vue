@@ -53,9 +53,11 @@ export default {
 
   created() {
     this.fetchForum({ id: this.id }).then(forum => {
-      this.fetchThreads({ ids: forum.threads }).then(threads => {
-        Object.values(threads).forEach(thread => this.fetchUser({ id: thread.userId }))
-      })
+      if (forum.threads) {
+        this.fetchThreads({ ids: forum.threads }).then(threads => {
+          Object.values(threads).forEach(thread => this.fetchUser({ id: thread.userId }))
+        })
+      }
     })
   }
 };
