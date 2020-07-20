@@ -3,7 +3,7 @@
     <TheNavbar />
     <div class="container">
       <!-- EDU ideal way to show loading indicator -->
-      <p v-show="!showPage">Loading ...</p>
+      <AppSpinner v-show="!showPage" />
       <router-view v-show="showPage" @ready="showPage = true" />
     </div>
   </div>
@@ -11,6 +11,8 @@
 
 <script>
 import TheNavbar from "@/components/TheNavbar";
+import AppSpinner from "@/components/AppSpinner"
+
 export default {
   data() {
     return {
@@ -19,7 +21,8 @@ export default {
   },
 
   components: {
-    TheNavbar
+    TheNavbar,
+    AppSpinner
   },
 
   // EDU reset showPage on change page to show loading indicator in every page
