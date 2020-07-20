@@ -2,7 +2,7 @@
   <div id="app">
     <TheNavbar />
     <div class="container">
-      // EDU ideal way to show loading indicator
+      <!-- EDU ideal way to show loading indicator -->
       <p v-show="!showPage">Loading ...</p>
       <router-view v-show="showPage" @ready="showPage = true" />
     </div>
