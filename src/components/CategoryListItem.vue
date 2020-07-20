@@ -1,5 +1,5 @@
 <template>
-  <div class="forum-list">
+  <div v-if="forums" class="forum-list">
     <h2 class="list-title">
       <router-link :to="{name: 'CategoryShow', params: {id: category['.key']}}">{{ category.name }}</router-link>
     </h2>
@@ -9,7 +9,8 @@
 
 <script>
 import ForumListItem from "./ForumListItem";
- 
+import { mapActions } from 'vuex';
+
 
 export default {
   props: {
@@ -25,10 +26,18 @@ export default {
 
   computed: {
     forums() {
-      return Object.values(  this.$store.state.forums).filter(
+      return Object.values(this.$store.state.forums).filter(
         forum => forum.categoryId === this.category[".key"]
       );
     }
+  },
+
+  methods: {
+    ...mapActions(['fetchForums'])
+  },
+
+  created() {
+    this.fetchForums({ ids: this.category.forums })
   }
 };
 </script>

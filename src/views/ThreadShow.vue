@@ -1,5 +1,5 @@
 <template>
-  <div class="col-large push-top">
+  <div v-if="thread && threadCreator" class="col-large push-top">
     <h1>
       {{ thread.title }}
       <router-link
@@ -28,6 +28,8 @@
 <script>
 import PostList from "@/components/PostList";
 import PostEditor from "@/components/PostEditor";
+import { countObjectProperties } from "@/utils";
+import { mapActions } from 'vuex';
 
 export default {
   props: {
@@ -56,14 +58,16 @@ export default {
     },
 
     countributorsCount() {
-      const userIds = Object.keys(this.thread.posts)
-        .filter(postId => postId !== this.thread.firstPostId)
-        .map(id => this.$store.state.posts[id])
-        .map(post => post.userId);
+      // const userIds = Object.keys(this.thread.posts)
+      //   .filter(postId => postId !== this.thread.firstPostId)
+      //   .map(id => this.$store.state.posts[id])
+      //   .map(post => post.userId);
 
-      //EDU remove duplicate array members
-      // return userIds.filter((item, index) => userIds.indexOf(item) === index).length;
-      return [...new Set(userIds)].length;
+      // //EDU remove duplicate array members
+      // // return userIds.filter((item, index) => userIds.indexOf(item) === index).length;
+      // return [...new Set(userIds)].length;
+
+      return countObjectProperties(this.thread.contributors);
     },
 
     posts() {
@@ -72,6 +76,19 @@ export default {
         postIds.includes(post[".key"])
       );
     }
+  },
+
+  methods: {
+    ...mapActions(['fetchThread', 'fetchUser', 'fetchPost', 'fetchPosts', 'fetchUsers'])
+  },
+
+  created() {
+    this.fetchThread({ id: this.id }).then(thread => {
+      this.fetchUser({ id: thread.userId });
+      this.fetchPosts({ ids: Object.keys(thread.posts) }).then(
+        posts => this.fetchUsers({ ids: posts.map(post => post.userId) })
+      )
+    });
   }
 };
 </script>

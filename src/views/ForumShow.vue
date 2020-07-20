@@ -1,5 +1,5 @@
 <template>
-  <div class="forum-wrapper">
+  <div v-if="forum && threads" class="forum-wrapper">
     <div class="col-full push-top">
       <div class="forum-header">
         <div class="forum-details">
@@ -21,6 +21,7 @@
 
 <script>
 import ThreadList from "@/components/ThreadList";
+import { mapActions } from 'vuex';
 
 export default {
   props: {
@@ -44,6 +45,20 @@ export default {
         thread => thread.forumId === this.id
       );
     }
+  },
+
+  methods: {
+    ...mapActions(['fetchForum', 'fetchThreads', 'fetchUser'])
+  },
+
+  created() {
+    this.fetchForum({ id: this.id }).then(forum => {
+      if (forum.threads) {
+        this.fetchThreads({ ids: forum.threads }).then(threads => {
+          Object.values(threads).forEach(thread => this.fetchUser({ id: thread.userId }))
+        })
+      }
+    })
   }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-full">
+  <div v-if="category" class="col-full push-top">
     <h1>{{ category.name }}</h1>
     <CategoryListItem :category="category" />
   </div>
@@ -7,7 +7,7 @@
 
 <script>
 import CategoryListItem from "@/components/CategoryListItem";
- 
+import { mapActions } from 'vuex';
 
 export default {
   props: {
@@ -18,12 +18,20 @@ export default {
   },
   computed: {
     category() {
-      return   this.$store.state.categories[this.id];
+      return this.$store.state.categories[this.id];
     }
   },
 
   components: {
     CategoryListItem
+  },
+
+  methods: {
+    ...mapActions(['fetchCategory'])
+  },
+
+  created() {
+    this.fetchCategory({ id: this.id });
   }
 };
 </script>
