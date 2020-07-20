@@ -1,5 +1,5 @@
 <template>
-  <div class="col-full push-top">
+  <div v-if="asyncDataStatus_ready" class="col-full push-top">
     <h1>Welcome to the Forum</h1>
     <CategoryList :categories="categories" />
   </div>
@@ -8,8 +8,11 @@
 <script>
 import CategoryList from "@/components/CategoryList";
 import { mapActions } from 'vuex';
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
+  mixins: [asyncDataStatus],
+
   computed: {
     categories() {
       return Object.values(this.$store.state.categories);
@@ -28,16 +31,15 @@ export default {
   //EDU: lifecycle hook, create: triggers before rendering template in DOM, so it is a great time to fire an AJAX call
   created() {
     this.fetchAllCategories().then(categories => {
-      Object.values(categories).forEach(category =>
-        this.fetchForums({ ids: category.forums })
-      )
+      (Promise.all(Object.values(categories).map(category => this.fetchForums({ ids: category.forums }))))
+        .then(() => this.asyncDataStatus_fetched())
     })
   },
 
   //EDU: lifecycle hook, beforeMount
   beforeMount() { },
 
-  //EDU: lifecycle hook, mounted: like ready function on jquery and in this hook we access to $el property
+  //EDU: lifecycle hook, mounted: like asyncDataStatus_ready function on jquery and in this hook we access to $el property
   mounted() { },
 
   //EDU: lifecycle hook, beforeDestroy: in before destroy the component is fully functional, best place to turn off listeners

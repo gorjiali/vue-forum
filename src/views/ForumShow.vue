@@ -1,5 +1,5 @@
 <template>
-  <div v-if="forum && threads" class="forum-wrapper">
+  <div v-if="asyncDataStatus_ready" class="forum-wrapper">
     <div class="col-full push-top">
       <div class="forum-header">
         <div class="forum-details">
@@ -22,8 +22,11 @@
 <script>
 import ThreadList from "@/components/ThreadList";
 import { mapActions } from 'vuex';
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
+  mixins: [asyncDataStatus],
+
   props: {
     id: {
       required: true,
@@ -55,8 +58,11 @@ export default {
     this.fetchForum({ id: this.id }).then(forum => {
       if (forum.threads) {
         this.fetchThreads({ ids: forum.threads }).then(threads => {
-          Object.values(threads).forEach(thread => this.fetchUser({ id: thread.userId }))
+          Promise.all(Object.values(threads).map(thread => this.fetchUser({ id: thread.userId })))
+            .then(() => this.asyncDataStatus_fetched())
         })
+      } else {
+        this.asyncDataStatus_fetched()
       }
     })
   }

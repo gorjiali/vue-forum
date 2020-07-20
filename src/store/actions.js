@@ -110,8 +110,11 @@ export default {
     },
 
     fetchItems({ dispatch }, { ids, resource }) {
-        ids = Array.isArray(ids) ? ids : Object.keys(ids);
-        return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
+        return new Promise((resolve, reject) => {
+            ids = Array.isArray(ids) ? ids : Object.keys(ids);
+            return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
+            .then((items) => resolve(items))
+        })
     },
 
     fetchForums: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'forums' }),
