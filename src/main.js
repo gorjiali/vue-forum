@@ -5,6 +5,7 @@ import store from './store';
 import AppDate from '@/components/AppDate';
 import firebase from 'firebase';
 
+// import fontawesome
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@fortawesome/fontawesome-free/js/all.js';
 
@@ -13,14 +14,14 @@ Vue.component('AppDate', AppDate);
 
 // Initialize Firebase
 const firebaseConfig = {
-  apiKey: 'AIzaSyDHGmztwaGx5U811FGX7PFkbERXTct7pbI',
-  authDomain: 'vue-forum-14ffb.firebaseapp.com',
-  databaseURL: 'https://vue-forum-14ffb.firebaseio.com',
-  projectId: 'vue-forum-14ffb',
-  storageBucket: 'vue-forum-14ffb.appspot.com',
-  messagingSenderId: '46520651320',
-  appId: '1:46520651320:web:16d12cabd68de26ca7a0cd',
-  measurementId: 'G-XZHRZBGY22',
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+  authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.VUE_APP_FIREBASE_DATABASE_URL,
+  projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_FIREBASE_APP_ID,
+  measurementId: process.env.VUE_APP_FIREBASE_MEASUREMENT_ID,
 };
 firebase.initializeApp(firebaseConfig);
 
