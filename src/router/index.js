@@ -8,6 +8,7 @@ import ForumShow from '@/views/PageForumShow.vue';
 import CategoryShow from '@/views/PageCategoryShow.vue';
 import NotFound from '@/views/PageNotFound.vue';
 import Profile from '@/views/PageProfile.vue';
+import Register from '@/views/PageRegister.vue';
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
   },
   {
     path: '/me',

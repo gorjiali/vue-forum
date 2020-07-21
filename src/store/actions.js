@@ -1,6 +1,25 @@
-import { database } from 'firebase';
+import { database, auth } from 'firebase';
 
 export default {
+    addUser({ commit, state }, { id, name, username, email, password, avatar = null }) {
+        return new Promise((resolve, reject) => {
+            const registeredAt = Math.floor(Date.now()) / 1000;
+            const usernameLower = username.toLowerCase();
+            const user = { name, username, email, password, avatar, registeredAt, usernameLower }
+            console.log(user)
+            database().ref('users').child(`${id}`).set(user)
+                .then(() => {
+                    commit('setItem', { resource: 'users', item: user, id: id });
+                    resolve(state.users[id])
+                })
+        })
+    },
+
+    registerUserWithEmailAndPassword({ dispatch }, { name, username, email, password, avatar = null }) {
+        return auth().createUserWithEmailAndPassword(email, password)
+            .then(user => dispatch('addUser', { id: user.uid, name, username, email, password, avatar }))
+    },
+
     addPost({ commit, state }, post) {
         const postId = database().ref('posts').push().key;
         post.userId = state.authId;
@@ -113,7 +132,7 @@ export default {
         return new Promise((resolve, reject) => {
             ids = Array.isArray(ids) ? ids : Object.keys(ids);
             return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
-            .then((items) => resolve(items))
+                .then((items) => resolve(items))
         })
     },
 
