@@ -17,7 +17,15 @@ export default {
 
     registerUserWithEmailAndPassword({ dispatch }, { name, username, email, password, avatar = null }) {
         return auth().createUserWithEmailAndPassword(email, password)
-            .then(user => dispatch('addUser', { id: user.uid, name, username, email, password, avatar }))
+            .then(user => {
+                return dispatch('addUser', { id: user.user.uid, name, username, email, password, avatar })
+            })
+    },
+
+    fetchAuthUser({ commit, dispatch }) {
+        const authId = auth().currentUser.uid;
+        return dispatch('fetchUser', { id: authId })
+            .then(() => commit('setAuthId', authId))
     },
 
     addPost({ commit, state }, post) {
