@@ -1,4 +1,5 @@
 import { database, auth } from 'firebase';
+import { Promise } from 'core-js';
 
 export default {
     addUser({ commit, state }, { id, name, username, email, password, avatar = null }) {
@@ -12,6 +13,23 @@ export default {
                     commit('setItem', { resource: 'users', item: user, id: id });
                     resolve(state.users[id])
                 })
+        })
+    },
+
+    initAuthentication({ dispatch, commit, state }) {
+        return new Promise((resolve, reject) => {
+            if (state.unsubscribeAuthObserver) {
+                state.unsubscribeAuthObserver()
+            }
+            const unsubscribe = auth().onAuthStateChanged(user => {
+                if (user) {
+                    dispatch('fetchAuthUser')
+                        .then(() => resolve(user))
+                } else {
+                    resolve(null)
+                }
+            })
+            commit('setUnsubscribeAuthObserver', unsubscribe)
         })
     },
 

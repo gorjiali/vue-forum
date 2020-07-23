@@ -31,7 +31,7 @@
                 <router-link :to="{name: 'Profile'}">Profile</router-link>
               </li>
               <li class="dropdown-menu-item">
-                <a @click="$store.dispatch('signOut')">Log out</a>
+                <a @click="$router.push({name: 'SignOut'})">Log out</a>
               </li>
             </ul>
           </div>

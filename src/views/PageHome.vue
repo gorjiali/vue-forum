@@ -46,7 +46,16 @@ export default {
   beforeDestroy() { },
 
   //EDU: lifecycle hook, destroyed: in destroyed we don't access to $el property and best place for informing a 3rd party that the component is destroyed
-  destroyed() { }
+  destroyed() { },
+
+  //EDU: lifecycle hook, triggre when enter to this route
+  // beforeRouteEnter() { },
+
+  //EDU: lifecycle hook, triggre when navigate from one route to another route where both render the same component (e.g params route) 
+  // beforeRouteUpdate() { },
+
+  //EDU: lifecycle hook, triggre when leave from this route
+  // beforeRouteLeave() { },
 };
 </script>
 

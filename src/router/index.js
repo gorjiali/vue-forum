@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import store from '@/store';
 import Home from '@/views/PageHome.vue';
 import ThreadShow from '@/views/PageThreadShow.vue';
 import ThreadCreate from '@/views/PageThreadCreate.vue';
@@ -29,11 +30,21 @@ const routes = [
     name: 'SignIn',
     component: SignIn,
   },
+  // EDU: component-less route
+  {
+    path: '/signOut',
+    name: 'SignOut',
+    beforeEnter(to, from, next) {
+      store.dispatch('signOut')
+        .then(router.push({ name: 'Home' }))
+    }
+  },
   {
     path: '/me',
     name: 'Profile',
     component: Profile,
     props: true,
+    meta: { requiresAuth: true },
   },
   {
     path: '/me/edit',
@@ -82,5 +93,19 @@ const router = new VueRouter({
   routes,
   mode: 'history',
 });
+
+router.beforeEach((to, from, next) => {
+  store.dispatch('initAuthentication').then(user => {
+    if (to.matched.some(item => item.meta.requiresAuth)) {
+      if (user) {
+        next();
+      } else {
+        next({ name: 'Home' });
+      }
+    } else {
+      next()
+    }
+  })
+})
 
 export default router;

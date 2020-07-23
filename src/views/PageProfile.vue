@@ -1,5 +1,6 @@
 <template>
-  <div class="flex-grid">
+  <h1>page profile</h1>
+  <!-- <div class="flex-grid">
     <UserProfileCard v-if="!edit" :user="user" />
     <UserProfileCardEditor v-else :user="user" />
 
@@ -12,7 +13,7 @@
       <hr />
       <PostList :posts="posts" />
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -48,6 +49,10 @@ export default {
       }
       return [];
     }
+  },
+
+  created() {
+    this.$emit('ready')
   }
 };
 </script>
