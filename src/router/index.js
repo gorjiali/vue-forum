@@ -9,6 +9,7 @@ import CategoryShow from '@/views/PageCategoryShow.vue';
 import NotFound from '@/views/PageNotFound.vue';
 import Profile from '@/views/PageProfile.vue';
 import Register from '@/views/PageRegister.vue';
+import SignIn from '@/views/PageSignIn.vue';
 
 Vue.use(VueRouter);
 
@@ -22,6 +23,11 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register,
+  },
+  {
+    path: '/signIn',
+    name: 'SignIn',
+    component: SignIn,
   },
   {
     path: '/me',

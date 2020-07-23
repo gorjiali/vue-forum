@@ -22,6 +22,15 @@ export default {
             })
     },
 
+    signInWithEmailAndPassword({ commit }, { email, password }) {
+        return auth().signInWithEmailAndPassword(email, password)
+    },
+
+    signOut({ commit }) {
+        return auth().signOut()
+            .then(() => commit('setAuthId', null));
+    },
+
     fetchAuthUser({ commit, dispatch }) {
         const authId = auth().currentUser.uid;
         return dispatch('fetchUser', { id: authId })

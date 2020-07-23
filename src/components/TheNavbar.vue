@@ -1,5 +1,5 @@
 <template>
-  <header v-if="user" class="header" id="header">
+  <header class="header" id="header">
     <router-link :to="{name: 'Home'}" class="logo">
       <img src="@/assets/img/vueschool-logo.svg" />
     </router-link>
@@ -12,30 +12,41 @@
     </div>
 
     <!-- use .navbar-open to open nav -->
-    <nav class="navbar">
-      <ul>
+    <nav 
+      class="navbar" 
+      @mouseover="dropDownOpen = true"
+      @mouseout="dropDownOpen = false">
+      <ul v-if="user">
         <li class="navbar-user">
-          <router-link :to="{name: 'Profile'}">
+          <a>
             <img class="avatar-small" :src="user.avatar" alt />
             <span>
               {{ user.name }}
               <img class="icon-profile" src="@/assets/img/arrow-profile.svg" alt />
             </span>
-          </router-link>
-
+          </a>
           <!-- dropdown menu -->
           <!-- add class "active-drop" to show the dropdown -->
-          <div id="user-dropdown">
+          <div id="user-dropdown" :class="{'active-drop': dropDownOpen}">
             <div class="triangle-drop"></div>
             <ul class="dropdown-menu">
               <li class="dropdown-menu-item">
-                <a href="profile.html">View profile</a>
+                <router-link :to="{name: 'Profile'}">Profile</router-link>
               </li>
               <li class="dropdown-menu-item">
-                <a href="#">Log out</a>
+                <a @click="$store.dispatch('signOut')">Log out</a>
               </li>
             </ul>
           </div>
+        </li>
+      </ul>
+
+      <ul v-else>
+        <li class="navbar-item">
+          <router-link :to="{name: 'SignIn'}">SignIn</router-link>
+        </li>
+        <li class="navbar-item">
+          <router-link :to="{name: 'Register'}">Register</router-link>
         </li>
       </ul>
 
@@ -68,6 +79,12 @@
 import { mapGetters } from "vuex";
 
 export default {
+  data() {
+    return {
+      dropDownOpen: false
+    }
+  },
+
   computed: {
     ...mapGetters({
       user: "authUser"
