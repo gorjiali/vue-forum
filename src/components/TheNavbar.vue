@@ -1,5 +1,5 @@
 <template>
-  <header class="header" id="header">
+  <header v-if="user" class="header" id="header">
     <router-link :to="{name: 'Home'}" class="logo">
       <img src="@/assets/img/vueschool-logo.svg" />
     </router-link>
@@ -13,37 +13,29 @@
 
     <!-- use .navbar-open to open nav -->
     <nav class="navbar">
-      <ul v-if="user">
+      <ul>
         <li class="navbar-user">
-          <a @click="dropDownOpen = !dropDownOpen">
+          <router-link :to="{name: 'Profile'}">
             <img class="avatar-small" :src="user.avatar" alt />
             <span>
               {{ user.name }}
               <img class="icon-profile" src="@/assets/img/arrow-profile.svg" alt />
             </span>
-          </a>
+          </router-link>
+
           <!-- dropdown menu -->
           <!-- add class "active-drop" to show the dropdown -->
-          <div id="user-dropdown" :class="{'active-drop': dropDownOpen}">
+          <div id="user-dropdown">
             <div class="triangle-drop"></div>
             <ul class="dropdown-menu">
               <li class="dropdown-menu-item">
-                <router-link :to="{name: 'Profile'}">Profile</router-link>
+                <a href="profile.html">View profile</a>
               </li>
               <li class="dropdown-menu-item">
-                <a @click="$store.dispatch('signOut')">Log out</a>
+                <a href="#">Log out</a>
               </li>
             </ul>
           </div>
-        </li>
-      </ul>
-
-      <ul v-else>
-        <li class="navbar-item">
-          <router-link :to="{name: 'SignIn'}">SignIn</router-link>
-        </li>
-        <li class="navbar-item">
-          <router-link :to="{name: 'Register'}">Register</router-link>
         </li>
       </ul>
 
@@ -76,12 +68,6 @@
 import { mapGetters } from "vuex";
 
 export default {
-  data() {
-    return {
-      dropDownOpen: false
-    }
-  },
-
   computed: {
     ...mapGetters({
       user: "authUser"

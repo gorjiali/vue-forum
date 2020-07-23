@@ -1,15 +1,13 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '@/views/PageHome.vue';
-import ThreadShow from '@/views/PageThreadShow.vue';
-import ThreadCreate from '@/views/PageThreadCreate.vue';
-import ThreadEdit from '@/views/PageThreadEdit.vue';
-import ForumShow from '@/views/PageForumShow.vue';
-import CategoryShow from '@/views/PageCategoryShow.vue';
-import NotFound from '@/views/PageNotFound.vue';
-import Profile from '@/views/PageProfile.vue';
-import Register from '@/views/PageRegister.vue';
-import SignIn from '@/views/PageSignIn.vue';
+import Home from '@/views/Home.vue';
+import ThreadShow from '@/views/ThreadShow.vue';
+import ThreadCreate from '@/views/ThreadCreate.vue';
+import ThreadEdit from '@/views/ThreadEdit.vue';
+import ForumShow from '@/views/ForumShow.vue';
+import CategoryShow from '@/views/CategoryShow.vue';
+import NotFound from '@/views/NotFound.vue';
+import Profile from '@/views/Profile.vue';
 
 Vue.use(VueRouter);
 
@@ -18,16 +16,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: Register,
-  },
-  {
-    path: '/signIn',
-    name: 'SignIn',
-    component: SignIn,
   },
   {
     path: '/me',

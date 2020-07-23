@@ -25,18 +25,13 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    store.dispatch('fetchAuthUser')
-  }
-})
-
-
 Vue.config.productionTip = false;
 
 new Vue({
   router,
   store,
+  beforeCreate() {
+    store.dispatch('fetchUser', { id: store.state.authId });
+  },
   render: (h) => h(App),
 }).$mount('#app');

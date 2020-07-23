@@ -13,10 +13,6 @@ export default {
         Vue.set(state[resource], id, item)
     },
 
-    setAuthId(state, id) {
-        state.authId = id;
-    },
-
     appendThreadToUser: makeAppendParentToChildMutation({ parent: 'users', child: 'threads' }),
 
     appendThreadToForum: makeAppendParentToChildMutation({ parent: 'forums', child: 'threads' }),
