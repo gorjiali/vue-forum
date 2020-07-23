@@ -21,12 +21,6 @@
           <router-link :to="{name: 'Register'}">Create an account?</router-link>
         </div>
       </form>
-
-      <div class="push-top text-center">
-        <button class="btn-red btn-xsmall">
-          <i class="fa fa-google fa-btn"></i>Sign in with Google
-        </button>
-      </div>
     </div>
   </div>
 </template>
@@ -50,7 +44,7 @@ export default {
   },
 
   created() {
-      this.$emit('ready');
+    this.$emit('ready');
   }
 }
 </script>

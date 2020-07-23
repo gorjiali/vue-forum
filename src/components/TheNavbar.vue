@@ -12,13 +12,10 @@
     </div>
 
     <!-- use .navbar-open to open nav -->
-    <nav 
-      class="navbar" 
-      @mouseover="dropDownOpen = true"
-      @mouseout="dropDownOpen = false">
+    <nav class="navbar">
       <ul v-if="user">
         <li class="navbar-user">
-          <a>
+          <a @click="dropDownOpen = !dropDownOpen">
             <img class="avatar-small" :src="user.avatar" alt />
             <span>
               {{ user.name }}
