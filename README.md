@@ -1,5 +1,7 @@
 # vue-forum
 
+vue-forum is a project that created using Vue.js and Firebase, during vueschool MasterClass Course
+
 ## Project setup
 ```
 yarn install
