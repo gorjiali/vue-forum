@@ -4,7 +4,9 @@
     <div class="container">
       <!-- EDU ideal way to show loading indicator -->
       <AppSpinner v-show="!showPage" />
-      <router-view v-show="showPage" @ready="readyPage" />
+
+      <!-- EDU force vue-router to destroy component when navigate from one route to another route that render same component and need to trigger lifecycle hooks like created hook -->
+      <router-view :key="$route.path" v-show="showPage" @ready="readyPage" />
     </div>
   </div>
 </template>

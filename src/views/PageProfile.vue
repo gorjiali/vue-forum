@@ -46,8 +46,10 @@ export default {
   },
 
   created() {
-    this.$store.dispatch('fetchPosts', { ids: this.user.posts })
-      .then(() => this.$emit('ready'))
+    if (this.user.posts) {
+      this.$store.dispatch('fetchPosts', { ids: this.user.posts })
+        .then(() => this.$emit('ready'))
+    } else { this.$emit('ready') }
   }
 };
 </script>
