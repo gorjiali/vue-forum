@@ -1,6 +1,5 @@
 <template>
-  <h1>page profile</h1>
-  <!-- <div class="flex-grid">
+  <div class="flex-grid">
     <UserProfileCard v-if="!edit" :user="user" />
     <UserProfileCardEditor v-else :user="user" />
 
@@ -13,7 +12,7 @@
       <hr />
       <PostList :posts="posts" />
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script>
@@ -42,17 +41,13 @@ export default {
     }),
 
     posts() {
-      if (this.user.posts) {
-        return Object.values(this.$store.state.posts).filter(
-          post => post.userId === this.user[".key"]
-        );
-      }
-      return [];
+      return this.$store.getters.userPosts(this.user['.key'])
     }
   },
 
   created() {
-    this.$emit('ready')
+    this.$store.dispatch('fetchPosts', { ids: this.user.posts })
+      .then(() => this.$emit('ready'))
   }
 };
 </script>
