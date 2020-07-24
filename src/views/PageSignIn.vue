@@ -39,9 +39,15 @@ export default {
   methods: {
     signIn() {
       this.$store.dispatch('signInWithEmailAndPassword', this.form)
-        .then(() => this.$router.push({ name: 'Home' }));
-    }
+        .then(() => this.successRedirect());
+    },
+
+    successRedirect() {
+      const redirectTo = this.$route.query.redirectTo || { name: 'Home' };
+      this.$router.push(redirectTo);
+    },
   },
+
 
   created() {
     this.$emit('ready');

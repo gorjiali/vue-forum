@@ -14,6 +14,7 @@ export default new Vuex.Store({
     threads: {},
     posts: {},
     authId: null,
+    unsubscribeAuthObserver: null
   },
 
   getters,

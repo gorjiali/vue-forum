@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import store from '@/store';
 import Home from '@/views/PageHome.vue';
 import ThreadShow from '@/views/PageThreadShow.vue';
 import ThreadCreate from '@/views/PageThreadCreate.vue';
@@ -23,23 +24,37 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register,
+    meta: { requiresGuest: true },
   },
   {
     path: '/signIn',
     name: 'SignIn',
     component: SignIn,
+    meta: { requiresGuest: true },
+  },
+  // EDU: component-less route
+  {
+    path: '/signOut',
+    name: 'SignOut',
+    meta: { requiresAuth: true },
+    beforeEnter(to, from, next) {
+      store.dispatch('signOut')
+        .then(router.push({ name: 'Home' }))
+    }
   },
   {
     path: '/me',
     name: 'Profile',
     component: Profile,
     props: true,
+    meta: { requiresAuth: true },
   },
   {
     path: '/me/edit',
     name: 'ProfileEdit',
     component: Profile,
     props: { edit: true },
+    meta: { requiresAuth: true },
   },
   {
     path: '/category/:id',
@@ -58,12 +73,14 @@ const routes = [
     name: 'ThreadCreate',
     component: ThreadCreate,
     props: true,
+    meta: { requiresAuth: true },
   },
   {
     path: '/thread/:id/edit',
     name: 'ThreadEdit',
     component: ThreadEdit,
     props: true,
+    meta: { requiresAuth: true },
   },
   {
     path: '/thread/:id',
@@ -82,5 +99,25 @@ const router = new VueRouter({
   routes,
   mode: 'history',
 });
+
+router.beforeEach((to, from, next) => {
+  store.dispatch('initAuthentication').then(user => {
+    if (to.matched.some(item => item.meta.requiresAuth)) {
+      if (user) {
+        next();
+      } else {
+        next({ name: 'SignIn', query: { redirectTo: to.path } });
+      }
+    } else if (to.matched.some(item => item.meta.requiresGuest)) {
+      if (!user) {
+        next();
+      } else {
+        next({ name: 'Home' });
+      }
+    } else {
+      next()
+    }
+  })
+})
 
 export default router;

@@ -1,4 +1,5 @@
 import { database, auth } from 'firebase';
+import { removeEmptyProperties } from '@/utils'
 
 export default {
     addUser({ commit, state }, { id, name, username, email, password, avatar = null }) {
@@ -12,6 +13,23 @@ export default {
                     commit('setItem', { resource: 'users', item: user, id: id });
                     resolve(state.users[id])
                 })
+        })
+    },
+
+    initAuthentication({ dispatch, commit, state }) {
+        return new Promise((resolve, reject) => {
+            if (state.unsubscribeAuthObserver) {
+                state.unsubscribeAuthObserver()
+            }
+            const unsubscribe = auth().onAuthStateChanged(user => {
+                if (user) {
+                    dispatch('fetchAuthUser')
+                        .then(() => resolve(user))
+                } else {
+                    resolve(null)
+                }
+            })
+            commit('setUnsubscribeAuthObserver', unsubscribe)
         })
     },
 
@@ -118,8 +136,23 @@ export default {
         });
     },
 
-    updateUser({ commit }, user) {
-        commit.commit('setUser', { user, userId: user['.key'] });
+    updateUser({ commit, state }, user) {
+        const updates = {
+            avatar: user.avatar,
+            name: user.name,
+            username: user.username,
+            bio: user.bio,
+            location: user.location,
+            website: user.website,
+            email: user.email,
+        };
+        return new Promise((resolve, reject) => {
+            database().ref('users').child(user['.key']).update(removeEmptyProperties(updates))
+                .then(() => {
+                    commit('setItem', {resource: 'users', item: user, id: user['.key'] });
+                    resolve(state.users[user['.key']]);
+                })
+        })
     },
 
     fetchItem({ commit, state }, { id, resource }) {

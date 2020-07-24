@@ -17,6 +17,9 @@ export default {
         state.authId = id;
     },
 
+    setUnsubscribeAuthObserver(state, unsubscribe) {
+        state.unsubscribeAuthObserver = unsubscribe;
+    },
     appendThreadToUser: makeAppendParentToChildMutation({ parent: 'users', child: 'threads' }),
 
     appendThreadToForum: makeAppendParentToChildMutation({ parent: 'forums', child: 'threads' }),

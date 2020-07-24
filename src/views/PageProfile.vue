@@ -41,13 +41,15 @@ export default {
     }),
 
     posts() {
-      if (this.user.posts) {
-        return Object.values(this.$store.state.posts).filter(
-          post => post.userId === this.user[".key"]
-        );
-      }
-      return [];
+      return this.$store.getters.userPosts(this.user['.key'])
     }
+  },
+
+  created() {
+    if (this.user.posts) {
+      this.$store.dispatch('fetchPosts', { ids: this.user.posts })
+        .then(() => this.$emit('ready'))
+    } else { this.$emit('ready') }
   }
 };
 </script>
