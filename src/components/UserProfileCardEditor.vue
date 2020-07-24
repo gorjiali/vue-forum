@@ -70,18 +70,11 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   props: {
     user: {
       type: Object,
-      required: true
-    },
-    userPostsCount: {
-      type: Number,
-      required: true
-    },
-    userThreadsCount: {
-      type: Number,
       required: true
     }
   },
@@ -92,9 +85,21 @@ export default {
     };
   },
 
+  computed: {
+    userPostsCount() {
+      return this.$store.getters.userPostsCount(this.user[".key"]);
+    },
+
+    userThreadsCount() {
+      return this.$store.getters.userThreadsCount(this.user[".key"]);
+    }
+  },
+
   methods: {
+    ...mapActions(['updateUser']),
+
     save() {
-      this.$store.dispatch("updateUser", { ...this.activeUser });
+      this.updateUser({ ...this.activeUser });
       this.$router.push({ name: "Profile" });
     },
 

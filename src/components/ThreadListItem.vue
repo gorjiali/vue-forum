@@ -1,5 +1,5 @@
 <template>
-  <div class="thread">
+  <div class="thread" v-if="user">
     <div>
       <p>
         <router-link :to="{name: 'ThreadShow', params: {id: thread['.key']}}">{{ thread.title }}</router-link>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
- 
+
 
 export default {
   props: {
@@ -44,12 +44,13 @@ export default {
 
   computed: {
     repliesCount() {
-      return Object.keys(this.thread.posts).length - 1;
+      return this.$store.getters.threadRepliesCount(this.thread['.key'])
     },
     user() {
-      return   this.$store.state.users[this.thread.userId];
+      return this.$store.state.users[this.thread.userId];
     }
-  }
+  },
+
 };
 </script>
 
