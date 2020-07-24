@@ -15,6 +15,7 @@
       <template v-if="!editing">
         <div>{{ post.text }}</div>
         <a
+          v-if="authUser"
           @click.prevent="editing = true"
           style="margin-left: auto;"
           class="link-unstyled"
@@ -38,6 +39,7 @@
 
 <script>
 import PostEditor from "./PostEditor";
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -58,6 +60,8 @@ export default {
   },
 
   computed: {
+    ...mapGetters(['authUser']),
+
     user() {
       return this.$store.state.users[this.post.userId];
     },
